@@ -70,21 +70,22 @@ vim.cmd [[
     autocmd bufnewfile,bufread * syntax sync fromstart
 ]]
 
-local lspconfig = require 'lspconfig'
+local function nmap(seq, what, opts)
+    local all_opts = {noremap = true, silent = true}
+    if opts then
+        for k, v in pairs(opts) do all_opts[k] = v end
+    end
+    return vim.keymap.set('n', seq, what, all_opts)
+end
 
 -- Mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
-local function set_diagnostic_mappings()
-    local opts = {noremap = true, silent = true}
-    local function nmap(seq, what)
-        return vim.keymap.set('n', seq, what, opts)
-    end
-    nmap('<space>e', vim.diagnostic.open_float)
-    nmap('[d',       vim.diagnostic.goto_prev)
-    nmap(']d',       vim.diagnostic.goto_next)
-    nmap('<space>q', vim.diagnostic.setloclist)
-end
-set_diagnostic_mappings()
+nmap('<space>e', vim.diagnostic.open_float)
+nmap('[d',       vim.diagnostic.goto_prev)
+nmap(']d',       vim.diagnostic.goto_next)
+nmap('<space>q', vim.diagnostic.setloclist)
+
+local lspconfig = require 'lspconfig'
 
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
@@ -94,9 +95,9 @@ local function on_attach(client, bufnr)
 
     -- Mappings.
     -- See `:help vim.lsp.*` for documentation on any of the below functions
-    local bufopts = {noremap = true, silent = true, buffer = bufnr}
-    local function nmap(seq, what)
-        return vim.keymap.set('n', seq, what, bufopts)
+    local nmap = function(seq, what) return nmap(seq, what, {buffer = bufnr}) end
+    local function show_folders()
+        print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
     end
     nmap('gD',        vim.lsp.buf.declaration)
     nmap('gd',        vim.lsp.buf.definition)
@@ -105,9 +106,7 @@ local function on_attach(client, bufnr)
     nmap('<C-k>',     vim.lsp.buf.signature_help)
     nmap('<space>wa', vim.lsp.buf.add_workspace_folder)
     nmap('<space>wr', vim.lsp.buf.remove_workspace_folder)
-    nmap('<space>wl', function()
-        print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-    end)
+    nmap('<space>wl', show_folders)
     nmap('<space>D',  vim.lsp.buf.type_definition)
     nmap('<space>rn', vim.lsp.buf.rename)
     nmap('<space>ca', vim.lsp.buf.code_action)
@@ -118,13 +117,10 @@ local lsp_flags = {
     -- This is the default in Nvim 0.7+
     debounce_text_changes = 150,
 }
-
 local function lsp_server_setup(server, opts)
     local all_opts = {on_attach = on_attach, flags = lsp_flags}
     if opts then
-        for k, v in pairs(opts) do
-            all_opts[k] = v
-        end
+        for k, v in pairs(opts) do all_opts[k] = v end
     end
     return lspconfig[server].setup(all_opts)
 end
