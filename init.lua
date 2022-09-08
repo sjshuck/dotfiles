@@ -52,7 +52,8 @@ vim.opt.splitright = true
 vim.opt.number = true
 vim.opt.colorcolumn = '81'
 
-vim.g.NERDTreeWinSize = 60
+vim.g.NERDTreeWinSize = 40
+vim.g.NERDTreeShowHidden = true
 
 vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
