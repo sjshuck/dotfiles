@@ -126,6 +126,7 @@ local function lsp_server_setup(server, opts)
     return lspconfig[server].setup(all_opts)
 end
 
+lsp_server_setup 'fsautocomplete'
 lsp_server_setup 'hls'
 lsp_server_setup 'pyright'
 lsp_server_setup 'terraformls'
