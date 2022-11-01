@@ -1,3 +1,4 @@
+local lspconfig = require 'lspconfig'
 local packer = require 'packer'
 
 packer.startup(function(use)
@@ -22,8 +23,10 @@ packer.startup(function(use)
     use 'sjshuck/vim-hs-sort-imports'
     --use '~/code/vim-hs-sort-imports'
 
-    -- LSP
+    -- LSP, completion
     use 'neovim/nvim-lspconfig'
+    use {'ms-jpq/coq_nvim', branch = 'coq'}
+    --use {'ms-jpq/coq.artifacts', branch = 'artifacts'}
 
     -- Syntax highlighting
     use 'OrangeT/vim-csharp'
@@ -55,6 +58,8 @@ vim.opt.colorcolumn = '81'
 vim.g.NERDTreeWinSize = 40
 vim.g.NERDTreeShowHidden = true
 
+vim.g.coq_settings = {['display.pum.fast_close'] = false}
+
 vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
 vim.opt.smarttab = true
@@ -85,8 +90,6 @@ nmap('<space>e', vim.diagnostic.open_float)
 nmap('[d',       vim.diagnostic.goto_prev)
 nmap(']d',       vim.diagnostic.goto_next)
 nmap('<space>q', vim.diagnostic.setloclist)
-
-local lspconfig = require 'lspconfig'
 
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
@@ -128,6 +131,7 @@ end
 
 lsp_server_setup 'fsautocomplete'
 lsp_server_setup 'hls'
+lsp_server_setup 'kotlin_language_server'
 lsp_server_setup 'pyright'
 lsp_server_setup 'terraformls'
 lsp_server_setup 'tsserver'
