@@ -1,3 +1,5 @@
+local cmp = require 'cmp'
+local cmp_nvim_lsp = require 'cmp_nvim_lsp'
 local lspconfig = require 'lspconfig'
 local packer = require 'packer'
 
@@ -25,8 +27,8 @@ packer.startup(function(use)
 
     -- LSP, completion
     use 'neovim/nvim-lspconfig'
-    use {'ms-jpq/coq_nvim', branch = 'coq'}
-    --use {'ms-jpq/coq.artifacts', branch = 'artifacts'}
+    use 'hrsh7th/nvim-cmp'
+    use 'hrsh7th/cmp-nvim-lsp'
 
     -- Syntax highlighting
     use 'OrangeT/vim-csharp'
@@ -57,8 +59,6 @@ vim.opt.colorcolumn = '81'
 
 vim.g.NERDTreeWinSize = 40
 vim.g.NERDTreeShowHidden = true
-
-vim.g.coq_settings = {['display.pum.fast_close'] = false}
 
 vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
@@ -94,13 +94,15 @@ nmap('<space>q', vim.diagnostic.setloclist)
 
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
-local function on_attach(client, bufnr)
+local function lsp_on_attach(client, bufnr)
     -- Enable completion triggered by <c-x><c-o>
     vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
     -- Mappings.
     -- See `:help vim.lsp.*` for documentation on any of the below functions
-    local nmap = function(seq, what) return nmap(seq, what, {buffer = bufnr}) end
+    local nmap = function(seq, what)
+        return nmap(seq, what, {buffer = bufnr})
+    end
     local function show_folders()
         print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
     end
@@ -122,8 +124,13 @@ local lsp_flags = {
     -- This is the default in Nvim 0.7+
     debounce_text_changes = 150,
 }
+local lsp_capabilities = cmp_nvim_lsp.default_capabilities()
 local function lsp_server_setup(server, opts)
-    local all_opts = {on_attach = on_attach, flags = lsp_flags}
+    local all_opts = {
+        on_attach = lsp_on_attach,
+        flags = lsp_flags,
+        capabilities = lsp_capabilities,
+    }
     if opts then
         for k, v in pairs(opts) do all_opts[k] = v end
     end
@@ -137,3 +144,9 @@ lsp_server_setup 'purescriptls'
 lsp_server_setup 'pyright'
 lsp_server_setup 'terraformls'
 lsp_server_setup 'tsserver'
+
+cmp.setup {
+    sources = cmp.config.sources {
+        {name = 'nvim_lsp'},
+    },
+}
