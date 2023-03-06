@@ -46,7 +46,7 @@ end)
 vim.opt.termguicolors = true
 
 vim.cmd 'colorscheme PaperColor'
-vim.opt.background = 'light'
+vim.opt.background = 'dark'
 vim.g.enable_bold_font = true
 vim.g.enable_italic_font = true
 vim.g.airline_powerline_fonts = true
@@ -64,6 +64,7 @@ vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
 vim.opt.smarttab = true
 vim.g.haskell_indent_disable = true
+vim.g.purescript_unicode_conceal_enable = false
 
 vim.opt.mouse = 'a'
 
@@ -132,6 +133,7 @@ end
 lsp_server_setup 'fsautocomplete'
 lsp_server_setup 'hls'
 lsp_server_setup 'kotlin_language_server'
+lsp_server_setup 'purescriptls'
 lsp_server_setup 'pyright'
 lsp_server_setup 'terraformls'
 lsp_server_setup 'tsserver'
