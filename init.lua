@@ -9,6 +9,7 @@ packer.startup(function(use)
 
     -- Colorschemes
     use 'flazz/vim-colorschemes'
+    use 'AlessandroYorba/Alduin'
 
     -- Status
     use 'vim-airline/vim-airline'
@@ -47,7 +48,9 @@ end)
 
 vim.opt.termguicolors = true
 
-vim.cmd 'colorscheme PaperColor'
+local colorscheme = 'alduin' -- 'PaperColor'
+vim.cmd('colorscheme ' .. colorscheme)
+
 vim.opt.background = 'dark'
 vim.g.enable_bold_font = true
 vim.g.enable_italic_font = true
