@@ -1,9 +1,17 @@
-local cmp = require 'cmp'
-local cmp_nvim_lsp = require 'cmp_nvim_lsp'
-local lspconfig = require 'lspconfig'
-local packer = require 'packer'
+-- Conditionally require module
+local function try_require(module_name)
+    local success, module = pcall(require, module_name)
+    local first_time = true
 
-packer.startup(function(use)
+    return function()
+        if success and first_time then
+            first_time = false
+            return module
+        end
+    end
+end
+
+local function use_packages(use)
     -- Packer itself
     use 'wbthomason/packer.nvim'
 
@@ -44,7 +52,10 @@ packer.startup(function(use)
     use 'kongo2002/fsharp-vim'
     use 'lnl7/vim-nix'
     use 'idris-hackers/idris-vim'
-end)
+end
+for packer in try_require 'packer' do
+    packer.startup(use_packages)
+end
 
 vim.opt.termguicolors = true
 
@@ -127,29 +138,37 @@ local lsp_flags = {
     -- This is the default in Nvim 0.7+
     debounce_text_changes = 150,
 }
-local lsp_capabilities = cmp_nvim_lsp.default_capabilities()
-local function lsp_server_setup(server, opts)
-    local all_opts = {
-        on_attach = lsp_on_attach,
-        flags = lsp_flags,
-        capabilities = lsp_capabilities,
-    }
-    if opts then
-        for k, v in pairs(opts) do all_opts[k] = v end
-    end
-    return lspconfig[server].setup(all_opts)
+local lsp_capabilities = nil
+for cmp_nvim_lsp in try_require 'cmp_nvim_lsp' do
+    lsp_capabilities = cmp_nvim_lsp.default_capabilities()
 end
 
-lsp_server_setup 'fsautocomplete'
-lsp_server_setup 'hls'
-lsp_server_setup 'kotlin_language_server'
-lsp_server_setup 'purescriptls'
-lsp_server_setup 'pyright'
-lsp_server_setup 'terraformls'
-lsp_server_setup 'tsserver'
+for lspconfig in try_require 'lspconfig' do
+    local function lsp_server_setup(server, opts)
+        local all_opts = {
+            on_attach = lsp_on_attach,
+            flags = lsp_flags,
+            capabilities = lsp_capabilities,
+        }
+        if opts then
+            for k, v in pairs(opts) do all_opts[k] = v end
+        end
+        return lspconfig[server].setup(all_opts)
+    end
 
-cmp.setup {
-    sources = cmp.config.sources {
-        {name = 'nvim_lsp'},
-    },
-}
+    lsp_server_setup 'fsautocomplete'
+    lsp_server_setup 'hls'
+    lsp_server_setup 'kotlin_language_server'
+    lsp_server_setup 'purescriptls'
+    lsp_server_setup 'pyright'
+    lsp_server_setup 'terraformls'
+    lsp_server_setup 'tsserver'
+end
+
+for cmp in try_require 'cmp' do
+    cmp.setup {
+        sources = cmp.config.sources {
+            {name = 'nvim_lsp'},
+        },
+    }
+end
