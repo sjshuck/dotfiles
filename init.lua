@@ -33,6 +33,7 @@ local function use_packages(use)
     use 'tpope/vim-abolish'
     use 'sjshuck/vim-hs-sort-imports'
     --use '~/code/vim-hs-sort-imports'
+    use 'iamcco/markdown-preview.nvim' -- must :call mkdp#util#install() once
 
     -- LSP, completion
     use 'neovim/nvim-lspconfig'
@@ -59,8 +60,7 @@ end
 
 vim.opt.termguicolors = true
 
-local colorscheme = 'alduin' -- 'PaperColor'
-vim.cmd('colorscheme ' .. colorscheme)
+vim.cmd 'colorscheme PaperColor'
 
 vim.opt.background = 'dark'
 vim.g.enable_bold_font = true
