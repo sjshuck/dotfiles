@@ -156,9 +156,11 @@ for lspconfig in try_require 'lspconfig' do
         return lspconfig[server].setup(all_opts)
     end
 
+    lsp_server_setup 'bashls'
     lsp_server_setup 'fsautocomplete'
     lsp_server_setup 'hls'
     lsp_server_setup 'kotlin_language_server'
+    lsp_server_setup 'lua_ls'
     lsp_server_setup 'purescriptls'
     lsp_server_setup 'pyright'
     lsp_server_setup 'terraformls'
@@ -167,6 +169,10 @@ end
 
 for cmp in try_require 'cmp' do
     cmp.setup {
+        mapping = cmp.mapping.preset.insert {
+            ['<C-n>'] = cmp.mapping.select_next_item(),
+            ['<C-p>'] = cmp.mapping.select_prev_item(),
+        },
         sources = cmp.config.sources {
             {name = 'nvim_lsp'},
         },
