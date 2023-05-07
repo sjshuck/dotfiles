@@ -1,11 +1,10 @@
 -- Conditionally require module
 local function try_require(module_name)
-    local success, module = pcall(require, module_name)
-    local first_time = true
+    local should_return_module, module = pcall(require, module_name)
 
     return function()
-        if success and first_time then
-            first_time = false
+        if should_return_module then
+            should_return_module = false -- only loop once
             return module
         end
     end
@@ -91,6 +90,8 @@ vim.cmd [[
     autocmd bufnewfile,bufread * syntax sync fromstart
 ]]
 
+-- Mappings.
+-- See `:help vim.diagnostic.*` for documentation on any of the below functions
 local function nmap(seq, what, opts)
     local all_opts = {noremap = true, silent = true}
     if opts then
@@ -98,9 +99,6 @@ local function nmap(seq, what, opts)
     end
     return vim.keymap.set('n', seq, what, all_opts)
 end
-
--- Mappings.
--- See `:help vim.diagnostic.*` for documentation on any of the below functions
 nmap('<space>e', vim.diagnostic.open_float)
 nmap('[d',       vim.diagnostic.goto_prev)
 nmap(']d',       vim.diagnostic.goto_next)
@@ -117,9 +115,6 @@ local function lsp_on_attach(client, bufnr)
     local nmap = function(seq, what)
         return nmap(seq, what, {buffer = bufnr})
     end
-    local function show_folders()
-        print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-    end
     nmap('gD',        vim.lsp.buf.declaration)
     nmap('gd',        vim.lsp.buf.definition)
     nmap('K',         vim.lsp.buf.hover)
@@ -127,7 +122,9 @@ local function lsp_on_attach(client, bufnr)
     nmap('<C-k>',     vim.lsp.buf.signature_help)
     nmap('<space>wa', vim.lsp.buf.add_workspace_folder)
     nmap('<space>wr', vim.lsp.buf.remove_workspace_folder)
-    nmap('<space>wl', show_folders)
+    nmap('<space>wl', function()
+        print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+    end)
     nmap('<space>D',  vim.lsp.buf.type_definition)
     nmap('<space>rn', vim.lsp.buf.rename)
     nmap('<space>ca', vim.lsp.buf.code_action)
@@ -155,8 +152,8 @@ for lspconfig in try_require 'lspconfig' do
         end
         return lspconfig[server].setup(all_opts)
     end
-
     lsp_server_setup 'bashls'
+    lsp_server_setup 'dhall_lsp_server'
     lsp_server_setup 'fsautocomplete'
     lsp_server_setup 'hls'
     lsp_server_setup 'kotlin_language_server'
