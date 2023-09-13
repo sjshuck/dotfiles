@@ -10,51 +10,61 @@ local function try_require(module_name)
     end
 end
 
-local function use_packages(use)
-    -- Packer itself
-    use 'wbthomason/packer.nvim'
-
-    -- Colorschemes
-    use 'flazz/vim-colorschemes'
-    use 'AlessandroYorba/Alduin'
-
-    -- Status
-    use 'vim-airline/vim-airline'
-    use 'vim-airline/vim-airline-themes'
-
-    -- Adding color to all buffers based on content
-    use 'ap/vim-css-color'
-    use 'powerman/vim-plugin-AnsiEsc'
-
-    -- General functionality
-    use 'preservim/nerdtree'
-    use 'tpope/vim-fugitive'
-    use 'tpope/vim-abolish'
-    use 'sjshuck/vim-hs-sort-imports'
-    --use '~/code/vim-hs-sort-imports'
-    use 'iamcco/markdown-preview.nvim' -- must :call mkdp#util#install() once
-
-    -- LSP, completion
-    use 'neovim/nvim-lspconfig'
-    use 'hrsh7th/nvim-cmp'
-    use 'hrsh7th/cmp-nvim-lsp'
-
-    -- Syntax highlighting
-    use 'OrangeT/vim-csharp'
-    use 'neovimhaskell/haskell-vim'
-    use 'purescript-contrib/purescript-vim'
-    use 'vmchale/dhall-vim'
-    use 'udalov/kotlin-vim'
-    use 'elixir-editors/vim-elixir'
-    use 'hashivim/vim-terraform'
-    use 'vito-c/jq.vim'
-    use 'cespare/vim-toml'
-    use 'kongo2002/fsharp-vim'
-    use 'lnl7/vim-nix'
-    use 'idris-hackers/idris-vim'
+-- Ensure lazy.nvim
+local lazy_nvim_path = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
+if not vim.loop.fs_stat(lazy_nvim_path) then
+    vim.fn.system {
+        'git', 'clone',
+        '--filter=blob:none',
+        '--branch=stable',
+        'https://github.com/folke/lazy.nvim.git',
+        lazy_nvim_path,
+    }
 end
-for packer in try_require 'packer' do
-    packer.startup(use_packages)
+vim.opt.rtp:prepend(lazy_nvim_path)
+
+for lazy in try_require 'lazy' do
+    lazy.setup {
+        -- Colorschemes
+        'flazz/vim-colorschemes',
+        --'NLKNguyen/papercolor-theme',
+        'AlessandroYorba/Alduin',
+
+        -- Status
+        'vim-airline/vim-airline',
+        'vim-airline/vim-airline-themes',
+
+        -- Adding color to all buffers based on content
+        'ap/vim-css-color',
+        'powerman/vim-plugin-AnsiEsc',
+
+        -- General functionality
+        'preservim/nerdtree',
+        'tpope/vim-fugitive',
+        'tpope/vim-abolish',
+        'sjshuck/vim-hs-sort-imports',
+        --'~/code/vim-hs-sort-imports',
+        'iamcco/markdown-preview.nvim', -- must :call mkdp#util#install() once
+
+        -- LSP, completion
+        'neovim/nvim-lspconfig',
+        'hrsh7th/nvim-cmp',
+        'hrsh7th/cmp-nvim-lsp',
+
+        -- Syntax highlighting
+        'OrangeT/vim-csharp',
+        'neovimhaskell/haskell-vim',
+        'purescript-contrib/purescript-vim',
+        'vmchale/dhall-vim',
+        'udalov/kotlin-vim',
+        'elixir-editors/vim-elixir',
+        'hashivim/vim-terraform',
+        'vito-c/jq.vim',
+        'cespare/vim-toml',
+        'kongo2002/fsharp-vim',
+        'lnl7/vim-nix',
+        'idris-hackers/idris-vim',
+    }
 end
 
 vim.opt.termguicolors = true
