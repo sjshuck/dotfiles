@@ -26,68 +26,79 @@ vim.opt.rtp:prepend(lazy_nvim_path)
 for lazy in try_require 'lazy' do
     lazy.setup {
         -- Colorschemes
-        'flazz/vim-colorschemes',
-        --'NLKNguyen/papercolor-theme',
-        'AlessandroYorba/Alduin',
+        { 'flazz/vim-colorschemes',
+            config = function()
+                vim.cmd 'colorscheme PaperColor'
+            end,
+        },
 
         -- Status
-        'vim-airline/vim-airline',
-        'vim-airline/vim-airline-themes',
+        { 'vim-airline/vim-airline',
+            init = function()
+                vim.g.airline_powerline_fonts = true
+            end,
+        },
+        { 'vim-airline/vim-airline-themes' },
 
         -- Adding color to all buffers based on content
-        'ap/vim-css-color',
-        'powerman/vim-plugin-AnsiEsc',
+        { 'ap/vim-css-color' },
+        { 'powerman/vim-plugin-AnsiEsc' },
 
         -- General functionality
-        'preservim/nerdtree',
-        'tpope/vim-fugitive',
-        'tpope/vim-abolish',
-        'sjshuck/vim-hs-sort-imports',
+        { 'preservim/nerdtree',
+            init = function()
+                vim.g.NERDTreeWinSize = 40
+                vim.g.NERDTreeShowHidden = true
+            end,
+        },
+        { 'tpope/vim-fugitive' },
+        { 'tpope/vim-abolish' },
+        { 'sjshuck/vim-hs-sort-imports' },
         --'~/code/vim-hs-sort-imports',
-        'iamcco/markdown-preview.nvim', -- must :call mkdp#util#install() once
+        { 'iamcco/markdown-preview.nvim' }, -- must :call mkdp#util#install() once
 
         -- LSP, completion
-        'neovim/nvim-lspconfig',
-        'hrsh7th/nvim-cmp',
-        'hrsh7th/cmp-nvim-lsp',
+        { 'neovim/nvim-lspconfig' },
+        { 'hrsh7th/nvim-cmp' },
+        { 'hrsh7th/cmp-nvim-lsp' },
 
         -- Syntax highlighting
-        'OrangeT/vim-csharp',
-        'neovimhaskell/haskell-vim',
-        'purescript-contrib/purescript-vim',
-        'vmchale/dhall-vim',
-        'udalov/kotlin-vim',
-        'elixir-editors/vim-elixir',
-        'hashivim/vim-terraform',
-        'vito-c/jq.vim',
-        'cespare/vim-toml',
-        'kongo2002/fsharp-vim',
-        'lnl7/vim-nix',
-        'idris-hackers/idris-vim',
+        { 'OrangeT/vim-csharp' },
+        { 'neovimhaskell/haskell-vim',
+            init = function()
+                vim.g.haskell_indent_disable = true
+            end,
+        },
+        { 'purescript-contrib/purescript-vim',
+            init = function()
+                vim.g.purescript_unicode_conceal_enable = false
+            end,
+        },
+        { 'vmchale/dhall-vim' },
+        { 'udalov/kotlin-vim' },
+        { 'elixir-editors/vim-elixir' },
+        { 'hashivim/vim-terraform' },
+        { 'vito-c/jq.vim' },
+        { 'cespare/vim-toml' },
+        { 'kongo2002/fsharp-vim' },
+        { 'lnl7/vim-nix' },
+        { 'idris-hackers/idris-vim' },
     }
 end
 
 vim.opt.termguicolors = true
 
-vim.cmd 'colorscheme PaperColor'
-
 vim.opt.background = 'dark'
 vim.g.enable_bold_font = true
 vim.g.enable_italic_font = true
-vim.g.airline_powerline_fonts = true
 
 vim.opt.splitright = true
 vim.opt.number = true
 vim.opt.colorcolumn = '81'
 
-vim.g.NERDTreeWinSize = 40
-vim.g.NERDTreeShowHidden = true
-
 vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
 vim.opt.smarttab = true
-vim.g.haskell_indent_disable = true
-vim.g.purescript_unicode_conceal_enable = false
 
 vim.opt.mouse = 'a'
 
@@ -103,7 +114,7 @@ vim.cmd [[
 -- Mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
 local function nmap(seq, what, opts)
-    local all_opts = {noremap = true, silent = true}
+    local all_opts = { noremap = true, silent = true }
     if opts then
         for k, v in pairs(opts) do all_opts[k] = v end
     end
@@ -123,7 +134,7 @@ local function lsp_on_attach(client, bufnr)
     -- Mappings.
     -- See `:help vim.lsp.*` for documentation on any of the below functions
     local nmap = function(seq, what)
-        return nmap(seq, what, {buffer = bufnr})
+        return nmap(seq, what, { buffer = bufnr })
     end
     nmap('gD',        vim.lsp.buf.declaration)
     nmap('gd',        vim.lsp.buf.definition)
@@ -181,7 +192,7 @@ for cmp in try_require 'cmp' do
             ['<C-p>'] = cmp.mapping.select_prev_item(),
         },
         sources = cmp.config.sources {
-            {name = 'nvim_lsp'},
+            { name = 'nvim_lsp' },
         },
     }
 end
