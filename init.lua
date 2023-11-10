@@ -26,7 +26,7 @@ vim.opt.rtp:prepend(lazy_nvim_path)
 for lazy in try_require 'lazy' do
     lazy.setup {
         -- Colorschemes
-        { 'flazz/vim-colorschemes',
+        { 'Jzice/vim-colorschemes',
             config = function()
                 vim.cmd 'colorscheme PaperColor'
             end,
