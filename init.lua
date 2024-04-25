@@ -179,6 +179,7 @@ for lspconfig in try_require 'lspconfig' do
     lsp_server_setup 'hls'
     lsp_server_setup 'kotlin_language_server'
     lsp_server_setup 'lua_ls'
+    lsp_server_setup 'nixd'
     lsp_server_setup 'purescriptls'
     lsp_server_setup 'pyright'
     lsp_server_setup 'terraformls'
