@@ -15,10 +15,5 @@ fi
 
 # zsh doesn't have help
 function help() {
-    local token
-    local args
-    for token in "$@"; do
-        args+=("$(printf "%q" "$token")")
-    done
-    bash -c "help ${args[*]}"
+    bash -c "help $(printf "%q " "$@")"
 }
