@@ -17,7 +17,6 @@ unsetopt pushdminus
 setopt histignorealldups
 
 # Initialize completion
-autoload -U +X compinit && compinit
 autoload -U +X bashcompinit && bashcompinit
 
 source ~/.bashrc

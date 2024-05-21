@@ -31,6 +31,7 @@ fi
 
 # Haskell
 source_if_exists ~/.ghcup/env
+eval "$(stack --bash-completion-script stack)"
 function my-stackage-snapshot() {
     ruby <~/.stack/global-project/stack.yaml -e '
         require "yaml"
