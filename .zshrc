@@ -1,8 +1,7 @@
 # oh-my-zsh
 export ZSH=~/.oh-my-zsh
 CASE_SENSITIVE=true
-# Uncomment the following line if pasting URLs and other text is messed up.
-# DISABLE_MAGIC_FUNCTIONS="true"
+DISABLE_MAGIC_FUNCTIONS=true
 COMPLETION_WAITING_DOTS=true
 source "${ZSH}/oh-my-zsh.sh"
 
