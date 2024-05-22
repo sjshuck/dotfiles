@@ -26,11 +26,7 @@ vim.opt.rtp:prepend(lazy_nvim_path)
 for lazy in try_require 'lazy' do
     lazy.setup {
         -- Colorschemes
-        { 'Jzice/vim-colorschemes',
-            config = function()
-                vim.cmd 'colorscheme PaperColor'
-            end,
-        },
+        { 'Jzice/vim-colorschemes' },
 
         -- Status
         { 'vim-airline/vim-airline',
@@ -87,6 +83,7 @@ for lazy in try_require 'lazy' do
 end
 
 vim.opt.termguicolors = true
+vim.cmd 'colorscheme PaperColor'
 
 vim.opt.background = 'dark'
 vim.g.enable_bold_font = true
