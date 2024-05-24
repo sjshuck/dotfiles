@@ -52,6 +52,7 @@ for lazy in try_require 'lazy' do
         { 'sjshuck/vim-hs-sort-imports' },
         --'~/code/vim-hs-sort-imports',
         { 'iamcco/markdown-preview.nvim' }, -- must :call mkdp#util#install() once
+        { 'chrisbra/unicode.vim' },
 
         -- LSP, completion
         { 'neovim/nvim-lspconfig' },
