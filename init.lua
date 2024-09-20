@@ -181,7 +181,7 @@ for lspconfig in try_require 'lspconfig' do
     lsp_server_setup 'purescriptls'
     lsp_server_setup 'pyright'
     lsp_server_setup 'terraformls'
-    lsp_server_setup 'tsserver'
+    lsp_server_setup 'ts_ls'
 end
 
 for cmp in try_require 'cmp' do
