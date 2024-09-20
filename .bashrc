@@ -32,25 +32,30 @@ fi
 # Haskell
 source_if_exists ~/.ghcup/env
 eval "$(stack --bash-completion-script stack)"
-function my-stackage-resolvers() {
+function my-stackage-snapshots() {
     python3 <<PYTHON
 from pathlib import Path
 import sys
 import yaml
 print_stderr = lambda *args, **kwargs: print(*args, file = sys.stderr, **kwargs)
-def load_resolver(path: Path) -> str:
-    return yaml.safe_load(path.read_text())['resolver']
+def load_snapshot(path: Path) -> str:
+    stack_yaml = yaml.safe_load(path.read_text())
+    for key in ['snapshot', 'resolver']:
+        if snapshot := stack_yaml.get(key):
+            return snapshot
+    print_stderr(f"{path} does not set snapshot or resolver")
+    exit(1)
 global_stack_yaml = Path.home() / '.stack/global-project/stack.yaml'
-global_resolver = load_resolver(global_stack_yaml)
+global_snapshot = load_snapshot(global_stack_yaml)
 if divergent_stack_yamls := [
     stack_yaml
     for stack_yaml in Path.home().glob('code/**/stack.yaml')
-    if load_resolver(stack_yaml) != global_resolver
+    if load_snapshot(stack_yaml) != global_snapshot
 ]:
-    print_stderr(f"These files should specify resolver: {global_resolver}:")
+    print_stderr(f"These files should specify snapshot: {global_snapshot}:")
     print(' '.join(str(path) for path in divergent_stack_yamls))
 else:
-    print_stderr(f"All stack.yaml files specify resolver: {global_resolver}")
+    print_stderr(f"All stack.yaml files specify snapshot: {global_snapshot}")
 PYTHON
 }
 
