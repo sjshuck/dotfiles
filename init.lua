@@ -53,6 +53,23 @@ for lazy in try_require 'lazy' do
         --'~/code/vim-hs-sort-imports',
         { 'iamcco/markdown-preview.nvim' }, -- must :call mkdp#util#install() once
         { 'chrisbra/unicode.vim' },
+        { 'nvim-orgmode/orgmode',
+            event = 'VeryLazy',
+            ft = { 'org' },
+            config = function()
+                require('orgmode').setup {
+                    org_agenda_files = '~/.local/share/orgfiles/**/*',
+                    org_default_notes_file = '~/.local/share/orgfiles/refile.org',
+                }
+
+                -- NOTE: If you are using nvim-treesitter with ~ensure_installed = "all"~ option
+                -- add ~org~ to ignore_install
+                -- require('nvim-treesitter.configs').setup({
+                --     ensure_installed = 'all',
+                --     ignore_install = { 'org' },
+                -- })
+            end,
+        },
 
         -- LSP, completion
         { 'neovim/nvim-lspconfig' },
