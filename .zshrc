@@ -20,8 +20,6 @@ autoload -U +X bashcompinit && bashcompinit
 
 source ~/.bashrc
 
-source_if_exists ~/.private
-
 # kubectl
 source <(kubectl completion zsh)
 

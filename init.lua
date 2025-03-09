@@ -50,7 +50,7 @@ for lazy in try_require 'lazy' do
         { 'tpope/vim-fugitive' },
         { 'tpope/vim-abolish' },
         { 'sjshuck/vim-hs-sort-imports' },
-        --'~/code/vim-hs-sort-imports',
+        --{ dir = '~/code/vim-hs-sort-imports' },
         { 'iamcco/markdown-preview.nvim' }, -- must :call mkdp#util#install() once
         { 'chrisbra/unicode.vim' },
         { 'nvim-orgmode/orgmode',
@@ -89,6 +89,7 @@ for lazy in try_require 'lazy' do
             end,
         },
         { 'vmchale/dhall-vim' },
+        { 'sophacles/vim-bundle-mako' },
         { 'udalov/kotlin-vim' },
         { 'elixir-editors/vim-elixir' },
         { 'hashivim/vim-terraform' },
@@ -194,7 +195,7 @@ for lspconfig in try_require 'lspconfig' do
     lsp_server_setup 'hls'
     lsp_server_setup 'kotlin_language_server'
     lsp_server_setup 'lua_ls'
-    lsp_server_setup 'nixd'
+    lsp_server_setup 'nil_ls'
     lsp_server_setup 'purescriptls'
     lsp_server_setup 'pyright'
     lsp_server_setup 'terraformls'
