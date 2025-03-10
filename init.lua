@@ -120,7 +120,7 @@ vim.opt.mouse = 'a'
 
 vim.cmd [[
     autocmd filetype ruby,yaml,html,xml set shiftwidth=2
-    autocmd bufnewfile,bufread Jenkinsfile set filetype=groovy
+    autocmd bufnewfile,bufread *Jenkinsfile* set filetype=groovy
     autocmd bufnewfile,bufread Dockerfile.* set filetype=dockerfile
     autocmd bufnewfile,bufread tsconfig.json set filetype=jsonc
     autocmd bufnewfile,bufread *.fsproj set filetype=xml
