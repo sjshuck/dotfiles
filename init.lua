@@ -10,65 +10,96 @@ local function try_require(module_name)
     end
 end
 
--- TODO Bootstrap vim-plug
-
-local function with_plug(f)
-    vim.call 'plug#begin'
-    f(vim.fn['plug#'])
-    vim.call 'plug#end'
+-- Ensure lazy.nvim
+local lazy_nvim_path = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
+if not vim.loop.fs_stat(lazy_nvim_path) then
+    vim.fn.system {
+        'git', 'clone',
+        '--filter=blob:none',
+        '--branch=stable',
+        'https://github.com/folke/lazy.nvim.git',
+        lazy_nvim_path,
+    }
 end
+vim.opt.rtp:prepend(lazy_nvim_path)
 
-with_plug(function(plug)
-    -- Colorschemes
-    plug 'Jzice/vim-colorschemes'
+for lazy in try_require 'lazy' do
+    lazy.setup {
+        -- Colorschemes
+        { 'Jzice/vim-colorschemes' },
 
-    -- Status
-    plug 'vim-airline/vim-airline'
-    vim.g.airline_powerline_fonts = true
+        -- Status
+        { 'vim-airline/vim-airline',
+            init = function()
+                vim.g.airline_powerline_fonts = true
+            end,
+        },
+        { 'vim-airline/vim-airline-themes' },
 
-    plug 'vim-airline/vim-airline-themes'
+        -- Adding color to all buffers based on content
+        { 'ap/vim-css-color' },
+        { 'powerman/vim-plugin-AnsiEsc' },
 
-    -- Adding color to all buffers based on content
-    plug 'ap/vim-css-color'
-    plug 'powerman/vim-plugin-AnsiEsc'
+        -- General functionality
+        { 'preservim/nerdtree',
+            init = function()
+                vim.g.NERDTreeWinSize = 40
+                vim.g.NERDTreeShowHidden = true
+            end,
+        },
+        { 'tpope/vim-fugitive' },
+        { 'tpope/vim-abolish' },
+        { 'sjshuck/vim-hs-sort-imports' },
+        --{ dir = '~/code/vim-hs-sort-imports' },
+        { 'iamcco/markdown-preview.nvim' }, -- must :call mkdp#util#install() once
+        { 'chrisbra/unicode.vim' },
+        { 'nvim-orgmode/orgmode',
+            event = 'VeryLazy',
+            ft = { 'org' },
+            config = function()
+                require('orgmode').setup {
+                    org_agenda_files = '~/.local/share/orgfiles/**/*',
+                    org_default_notes_file = '~/.local/share/orgfiles/refile.org',
+                }
 
-    -- General functionality
-    plug 'preservim/nerdtree'
-    vim.g.NERDTreeWinSize = 40
-    vim.g.NERDTreeShowHidden = true
+                -- NOTE: If you are using nvim-treesitter with ~ensure_installed = "all"~ option
+                -- add ~org~ to ignore_install
+                -- require('nvim-treesitter.configs').setup({
+                --     ensure_installed = 'all',
+                --     ignore_install = { 'org' },
+                -- })
+            end,
+        },
 
-    plug 'tpope/vim-fugitive'
-    plug 'tpope/vim-abolish'
-    plug 'sjshuck/vim-hs-sort-imports'
-    --plug '~/code/vim-hs-sort-imports'
-    plug 'iamcco/markdown-preview.nvim'  -- must :call mkdp#util#install() once
-    plug 'chrisbra/unicode.vim'
+        -- LSP, completion
+        { 'neovim/nvim-lspconfig' },
+        { 'hrsh7th/nvim-cmp' },
+        { 'hrsh7th/cmp-nvim-lsp' },
 
-    -- LSP, completion
-    plug 'neovim/nvim-lspconfig'
-    plug 'hrsh7th/nvim-cmp'
-    plug 'hrsh7th/cmp-nvim-lsp'
-
-    -- Syntax highlighting
-    plug 'OrangeT/vim-csharp'
-
-    plug 'neovimhaskell/haskell-vim'
-    vim.g.haskell_indent_disable = true
-
-    plug 'purescript-contrib/purescript-vim'
-    vim.g.purescript_unicode_conceal_enable = false
-
-    plug 'vmchale/dhall-vim'
-    plug 'sophacles/vim-bundle-mako'
-    plug 'udalov/kotlin-vim'
-    plug 'elixir-editors/vim-elixir'
-    plug 'hashivim/vim-terraform'
-    plug 'vito-c/jq.vim'
-    plug 'cespare/vim-toml'
-    plug 'kongo2002/fsharp-vim'
-    plug 'lnl7/vim-nix'
-    plug 'idris-hackers/idris-vim'
-end)
+        -- Syntax highlighting
+        { 'OrangeT/vim-csharp' },
+        { 'neovimhaskell/haskell-vim',
+            init = function()
+                vim.g.haskell_indent_disable = true
+            end,
+        },
+        { 'purescript-contrib/purescript-vim',
+            init = function()
+                vim.g.purescript_unicode_conceal_enable = false
+            end,
+        },
+        { 'vmchale/dhall-vim' },
+        { 'sophacles/vim-bundle-mako' },
+        { 'udalov/kotlin-vim' },
+        { 'elixir-editors/vim-elixir' },
+        { 'hashivim/vim-terraform' },
+        { 'vito-c/jq.vim' },
+        { 'cespare/vim-toml' },
+        { 'kongo2002/fsharp-vim' },
+        { 'lnl7/vim-nix' },
+        { 'idris-hackers/idris-vim' },
+    }
+end
 
 vim.opt.termguicolors = true
 vim.cmd 'colorscheme PaperColor'
@@ -145,7 +176,6 @@ local lsp_capabilities = nil
 for cmp_nvim_lsp in try_require 'cmp_nvim_lsp' do
     lsp_capabilities = cmp_nvim_lsp.default_capabilities()
 end
-
 local function lsp_server_setup(server, opts)
     vim.lsp.enable(server)
     local all_opts = {
