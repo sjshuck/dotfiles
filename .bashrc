@@ -60,4 +60,3 @@ export EDITOR=vim
 alias ls='ls --color=auto'
 alias l='ls -CF'
 alias grep='grep --color=auto'
-alias lua='rlwrap lua'
