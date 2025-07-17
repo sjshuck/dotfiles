@@ -189,9 +189,12 @@ local function lsp_server_setup(server, opts)
     vim.lsp.config(server, all_opts)
 end
 lsp_server_setup 'bashls'
+lsp_server_setup 'cssls'
 lsp_server_setup 'dhall_lsp_server'
 lsp_server_setup 'fsautocomplete'
 lsp_server_setup 'hls'
+lsp_server_setup 'html'
+lsp_server_setup 'jsonls'
 lsp_server_setup 'kotlin_language_server'
 lsp_server_setup 'lua_ls'
 lsp_server_setup 'nil_ls'
