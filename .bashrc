@@ -55,6 +55,11 @@ function doit() {
     git add -A && git commit --amend --no-edit && git push --force
 }
 
+# vim-open and highlight all files containing a given regex
+function rgvim() {
+    rg -l "$1" | xargs -d '\n' vim -c "/\\v${1}" -O
+}
+
 # Miscellaneous shell settings
 export EDITOR=vim
 alias ls='ls --color=auto'
