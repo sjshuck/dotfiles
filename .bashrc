@@ -28,13 +28,15 @@ prepend_to_path ~/.local/bin
 export TF_PLUGIN_CACHE_DIR=~/.terraform.d/plugin-cache
 
 # kubectl
-if [[ $(current_shell) == bash ]]; then
-    source <(kubectl completion bash)
+if command -v kubectl >/dev/null; then
+    source <(kubectl completion "$(current_shell)")
 fi
 
 # Haskell
 source_if_exists ~/.ghcup/env
-eval "$(stack --bash-completion-script stack)"
+if command -v stack >/dev/null; then
+    eval "$(stack --bash-completion-script stack)"
+fi
 
 # Nix
 prepend_to_path ~/.nix-profile/bin

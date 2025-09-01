@@ -20,9 +20,6 @@ autoload -U +X bashcompinit && bashcompinit
 
 source ~/.bashrc
 
-# kubectl
-source <(kubectl completion zsh)
-
 # OpenTofu/Terraform
 if [[ -x /usr/bin/tofu ]]; then
     complete -o nospace -C /usr/bin/tofu tofu
