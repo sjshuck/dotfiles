@@ -13,12 +13,12 @@ vim.opt.rtp:prepend(lazy_nvim_path)
 
 require('lazy').setup {
     -- Colorschemes
-    { "ellisonleao/gruvbox.nvim" },
+    { 'ellisonleao/gruvbox.nvim' },
+    { 'NLKNguyen/papercolor-theme' },  -- hover text is black and other problems
 
     -- Status
     { 'nvim-lualine/lualine.nvim',
         dependencies = { 'nvim-tree/nvim-web-devicons' },
-        --options = { theme = 'gruvbox' },
         init = function()
             require('lualine').setup()
         end,
@@ -29,10 +29,13 @@ require('lazy').setup {
     { 'powerman/vim-plugin-AnsiEsc' },
 
     -- General functionality
-    { 'preservim/nerdtree',
-        init = function()
-            vim.g.NERDTreeWinSize = 40
-            vim.g.NERDTreeShowHidden = true
+    { 'nvim-tree/nvim-tree.lua',
+        lazy = false,
+        dependencies = { 'nvim-tree/nvim-web-devicons' },
+        config = function()
+            require('nvim-tree').setup {
+                view = { width = 30 },
+            }
         end,
     },
     { 'tpope/vim-fugitive' },
