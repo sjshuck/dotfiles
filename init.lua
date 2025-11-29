@@ -1,15 +1,3 @@
--- Conditionally require module
-local function try_require(module_name)
-    local should_return_module, module = pcall(require, module_name)
-
-    return function()
-        if should_return_module then
-            should_return_module = false -- only loop once
-            return module
-        end
-    end
-end
-
 -- Ensure lazy.nvim
 local lazy_nvim_path = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
 if not vim.loop.fs_stat(lazy_nvim_path) then
@@ -23,86 +11,85 @@ if not vim.loop.fs_stat(lazy_nvim_path) then
 end
 vim.opt.rtp:prepend(lazy_nvim_path)
 
-for lazy in try_require 'lazy' do
-    lazy.setup {
-        -- Colorschemes
-        { 'Jzice/vim-colorschemes' },
+require('lazy').setup {
+    -- Colorschemes
+    { "ellisonleao/gruvbox.nvim" },
 
-        -- Status
-        { 'vim-airline/vim-airline',
-            init = function()
-                vim.g.airline_powerline_fonts = true
-            end,
-        },
-        { 'vim-airline/vim-airline-themes' },
+    -- Status
+    { 'nvim-lualine/lualine.nvim',
+        dependencies = { 'nvim-tree/nvim-web-devicons' },
+        --options = { theme = 'gruvbox' },
+        init = function()
+            require('lualine').setup()
+        end,
+    },
 
-        -- Adding color to all buffers based on content
-        { 'ap/vim-css-color' },
-        { 'powerman/vim-plugin-AnsiEsc' },
+    -- Adding color to all buffers based on content
+    { 'ap/vim-css-color' },
+    { 'powerman/vim-plugin-AnsiEsc' },
 
-        -- General functionality
-        { 'preservim/nerdtree',
-            init = function()
-                vim.g.NERDTreeWinSize = 40
-                vim.g.NERDTreeShowHidden = true
-            end,
-        },
-        { 'tpope/vim-fugitive' },
-        { 'tpope/vim-abolish' },
-        { 'sjshuck/vim-hs-sort-imports' },
-        --{ dir = '~/code/vim-hs-sort-imports' },
-        { 'iamcco/markdown-preview.nvim' }, -- must :call mkdp#util#install() once
-        { 'chrisbra/unicode.vim' },
-        { 'nvim-orgmode/orgmode',
-            event = 'VeryLazy',
-            ft = { 'org' },
-            config = function()
-                require('orgmode').setup {
-                    org_agenda_files = '~/.local/share/orgfiles/**/*',
-                    org_default_notes_file = '~/.local/share/orgfiles/refile.org',
-                }
+    -- General functionality
+    { 'preservim/nerdtree',
+        init = function()
+            vim.g.NERDTreeWinSize = 40
+            vim.g.NERDTreeShowHidden = true
+        end,
+    },
+    { 'tpope/vim-fugitive' },
+    { 'tpope/vim-abolish' },
+    { 'sjshuck/vim-hs-sort-imports' },
+    --{ dir = '~/code/vim-hs-sort-imports' },
+    { 'iamcco/markdown-preview.nvim' }, -- must :call mkdp#util#install() once
+    { 'chrisbra/unicode.vim' },
+    { 'nvim-orgmode/orgmode',
+        event = 'VeryLazy',
+        ft = { 'org' },
+        config = function()
+            require('orgmode').setup {
+                org_agenda_files = '~/.local/share/orgfiles/**/*',
+                org_default_notes_file = '~/.local/share/orgfiles/refile.org',
+            }
 
-                -- NOTE: If you are using nvim-treesitter with ~ensure_installed = "all"~ option
-                -- add ~org~ to ignore_install
-                -- require('nvim-treesitter.configs').setup({
-                --     ensure_installed = 'all',
-                --     ignore_install = { 'org' },
-                -- })
-            end,
-        },
+            -- NOTE: If you are using nvim-treesitter with ~ensure_installed = "all"~ option
+            -- add ~org~ to ignore_install
+            -- require('nvim-treesitter.configs').setup({
+            --     ensure_installed = 'all',
+            --     ignore_install = { 'org' },
+            -- })
+        end,
+    },
 
-        -- LSP, completion
-        { 'neovim/nvim-lspconfig' },
-        { 'hrsh7th/nvim-cmp' },
-        { 'hrsh7th/cmp-nvim-lsp' },
+    -- LSP, completion
+    { 'neovim/nvim-lspconfig' },
+    { 'hrsh7th/nvim-cmp' },
+    { 'hrsh7th/cmp-nvim-lsp' },
 
-        -- Syntax highlighting
-        { 'OrangeT/vim-csharp' },
-        { 'neovimhaskell/haskell-vim',
-            init = function()
-                vim.g.haskell_indent_disable = true
-            end,
-        },
-        { 'purescript-contrib/purescript-vim',
-            init = function()
-                vim.g.purescript_unicode_conceal_enable = false
-            end,
-        },
-        { 'vmchale/dhall-vim' },
-        { 'sophacles/vim-bundle-mako' },
-        { 'udalov/kotlin-vim' },
-        { 'elixir-editors/vim-elixir' },
-        { 'hashivim/vim-terraform' },
-        { 'vito-c/jq.vim' },
-        { 'cespare/vim-toml' },
-        { 'kongo2002/fsharp-vim' },
-        { 'lnl7/vim-nix' },
-        { 'idris-hackers/idris-vim' },
-    }
-end
+    -- Syntax highlighting
+    { 'OrangeT/vim-csharp' },
+    { 'neovimhaskell/haskell-vim',
+        init = function()
+            vim.g.haskell_indent_disable = true
+        end,
+    },
+    { 'purescript-contrib/purescript-vim',
+        init = function()
+            vim.g.purescript_unicode_conceal_enable = false
+        end,
+    },
+    { 'vmchale/dhall-vim' },
+    { 'sophacles/vim-bundle-mako' },
+    { 'udalov/kotlin-vim' },
+    { 'elixir-editors/vim-elixir' },
+    { 'hashivim/vim-terraform' },
+    { 'vito-c/jq.vim' },
+    { 'cespare/vim-toml' },
+    { 'kongo2002/fsharp-vim' },
+    { 'lnl7/vim-nix' },
+    { 'idris-hackers/idris-vim' },
+}
 
-vim.opt.termguicolors = true
-vim.cmd 'colorscheme PaperColor'
+vim.opt.termguicolors = false --true
+vim.cmd 'colorscheme gruvbox'
 
 vim.opt.background = 'dark'
 vim.g.enable_bold_font = true
@@ -172,10 +159,7 @@ local lsp_flags = {
     -- This is the default in Nvim 0.7+
     debounce_text_changes = 150,
 }
-local lsp_capabilities = nil
-for cmp_nvim_lsp in try_require 'cmp_nvim_lsp' do
-    lsp_capabilities = cmp_nvim_lsp.default_capabilities()
-end
+local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
 local function lsp_server_setup(server, opts)
     vim.lsp.enable(server)
     local all_opts = {
@@ -203,14 +187,13 @@ lsp_server_setup 'pyright'
 lsp_server_setup 'terraformls'
 lsp_server_setup 'ts_ls'
 
-for cmp in try_require 'cmp' do
-    cmp.setup {
-        mapping = cmp.mapping.preset.insert {
-            ['<C-n>'] = cmp.mapping.select_next_item(),
-            ['<C-p>'] = cmp.mapping.select_prev_item(),
-        },
-        sources = cmp.config.sources {
-            { name = 'nvim_lsp' },
-        },
-    }
-end
+local cmp = require('cmp')
+cmp.setup {
+    mapping = cmp.mapping.preset.insert {
+        ['<C-n>'] = cmp.mapping.select_next_item(),
+        ['<C-p>'] = cmp.mapping.select_prev_item(),
+    },
+    sources = cmp.config.sources {
+        { name = 'nvim_lsp' },
+    },
+}
