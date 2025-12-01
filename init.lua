@@ -14,6 +14,7 @@ vim.opt.rtp:prepend(lazy_nvim_path)
 require('lazy').setup {
     -- Colorschemes
     { 'ellisonleao/gruvbox.nvim' },
+    { 'sainnhe/everforest' },
     { 'NLKNguyen/papercolor-theme' },  -- hover text is black and other problems
 
     -- Status
@@ -91,8 +92,10 @@ require('lazy').setup {
     { 'idris-hackers/idris-vim' },
 }
 
-vim.opt.termguicolors = false --true
-vim.cmd 'colorscheme gruvbox'
+vim.opt.termguicolors = false
+local colorscheme =
+    vim.env.TERM_PROGRAM == 'Apple_Terminal' and 'everforest' or 'gruvbox'
+vim.cmd('colorscheme ' .. colorscheme)
 
 vim.opt.background = 'dark'
 vim.g.enable_bold_font = true
