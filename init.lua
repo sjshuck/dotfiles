@@ -33,11 +33,9 @@ require('lazy').setup {
     { 'nvim-tree/nvim-tree.lua',
         lazy = false,
         dependencies = { 'nvim-tree/nvim-web-devicons' },
-        config = function()
-            require('nvim-tree').setup {
-                view = { width = 30 },
-            }
-        end,
+        opts = {
+            view = { width = 30 },
+        },
     },
     { 'tpope/vim-fugitive' },
     { 'tpope/vim-abolish' },
@@ -48,19 +46,17 @@ require('lazy').setup {
     { 'nvim-orgmode/orgmode',
         event = 'VeryLazy',
         ft = { 'org' },
-        config = function()
-            require('orgmode').setup {
-                org_agenda_files = '~/.local/share/orgfiles/**/*',
-                org_default_notes_file = '~/.local/share/orgfiles/refile.org',
-            }
+        opts = {
+            org_agenda_files = '~/.local/share/orgfiles/**/*',
+            org_default_notes_file = '~/.local/share/orgfiles/refile.org',
+        },
 
-            -- NOTE: If you are using nvim-treesitter with ~ensure_installed = "all"~ option
-            -- add ~org~ to ignore_install
-            -- require('nvim-treesitter.configs').setup({
-            --     ensure_installed = 'all',
-            --     ignore_install = { 'org' },
-            -- })
-        end,
+        -- NOTE: If you are using nvim-treesitter with ~ensure_installed = "all"~ option
+        -- add ~org~ to ignore_install
+        -- require('nvim-treesitter.configs').setup({
+        --     ensure_installed = 'all',
+        --     ignore_install = { 'org' },
+        -- })
     },
 
     -- LSP, completion
