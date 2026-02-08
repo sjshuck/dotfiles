@@ -1,14 +1,21 @@
 # shellcheck disable=1090,1091
 
+# Current shell
+case $1 in
+    from-zsh)
+        current_shell=zsh
+        ;;
+    '')
+        current_shell=bash
+        ;;
+    *)
+        echo >&2 "Unexpected ~/.bashrc args ${*}"
+esac
+
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
 # Common startup utilities
-function current_shell() {
-    ps co pid,command | awk "{
-        if (\$1 == $$) { print \$2; exit }
-    }" | sed -e 's/^-//'
-}
 function prepend_to_path() {
     export PATH="${1}:${PATH}"
 }
@@ -29,13 +36,29 @@ export TF_PLUGIN_CACHE_DIR=~/.terraform.d/plugin-cache
 
 # kubectl
 if command -v kubectl >/dev/null; then
-    source <(kubectl completion "$(current_shell)")
+    source <(kubectl completion "$current_shell")
 fi
 
 # Haskell
 source_if_exists ~/.ghcup/env
 if command -v stack >/dev/null; then
     eval "$(stack --bash-completion-script stack)"
+fi
+function hackage-upload() {
+    curl \
+        -u "$HACKAGE_CREDS" \
+        -F package="@${1}" \
+        https://hackage.haskell.org/packages/candidates/
+}
+
+# Idris
+if command -v idris2 >/dev/null; then
+    function _idris2() {
+        ED="$([ -z "$2" ] && echo "--" || echo "$2")"
+        # shellcheck disable=2086 disable=2207
+        COMPREPLY=($(idris2 --bash-completion $ED $3))
+    }
+    complete -F _idris2 -o default idris2
 fi
 
 # Nix
@@ -67,3 +90,5 @@ export EDITOR=vim
 alias ls='ls --color=auto'
 alias l='ls -CF'
 alias grep='grep --color=auto'
+
+unset current_shell
