@@ -86,7 +86,6 @@ require('lazy').setup {
     { 'cespare/vim-toml' },
     { 'kongo2002/fsharp-vim' },
     { 'lnl7/vim-nix' },
-    { 'ShinKage/idris2-nvim' },
 }
 
 vim.opt.termguicolors = false
@@ -181,7 +180,6 @@ lsp_server_setup 'dhall_lsp_server'
 lsp_server_setup 'fsautocomplete'
 lsp_server_setup 'hls'
 lsp_server_setup 'html'
-lsp_server_setup 'idris2_lsp'
 lsp_server_setup 'jsonls'
 lsp_server_setup 'kotlin_language_server'
 lsp_server_setup 'lua_ls'

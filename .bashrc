@@ -30,6 +30,7 @@ source_if_exists ~/.private
 
 # Local programs
 prepend_to_path ~/.local/bin
+prepend_to_path ~/.mcabal/bin
 
 # OpenTofu/Terraform
 export TF_PLUGIN_CACHE_DIR=~/.terraform.d/plugin-cache
@@ -50,16 +51,6 @@ function hackage-upload() {
         -F package="@${1}" \
         https://hackage.haskell.org/packages/candidates/
 }
-
-# Idris
-if command -v idris2 >/dev/null; then
-    function _idris2() {
-        ED="$([ -z "$2" ] && echo "--" || echo "$2")"
-        # shellcheck disable=2086 disable=2207
-        COMPREPLY=($(idris2 --bash-completion $ED $3))
-    }
-    complete -F _idris2 -o default idris2
-fi
 
 # Nix
 prepend_to_path ~/.nix-profile/bin
