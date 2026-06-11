@@ -42,7 +42,11 @@ require('lazy').setup {
     { 'tpope/vim-abolish' },
     { 'sjshuck/vim-hs-sort-imports' },
     --{ dir = '~/code/vim-hs-sort-imports' },
-    { 'iamcco/markdown-preview.nvim' }, -- must :call mkdp#util#install() once
+    { 'iamcco/markdown-preview.nvim',
+        build = function()
+            vim.fn['mkdp#util#install']()
+        end,
+    },
     { 'chrisbra/unicode.vim' },
     { 'nvim-orgmode/orgmode',
         event = 'VeryLazy',
@@ -66,15 +70,9 @@ require('lazy').setup {
     { 'hrsh7th/cmp-nvim-lsp' },
 
     -- Syntax highlighting
-    { 'OrangeT/vim-csharp' },
     { 'neovimhaskell/haskell-vim',
         init = function()
             vim.g.haskell_indent_disable = true
-        end,
-    },
-    { 'purescript-contrib/purescript-vim',
-        init = function()
-            vim.g.purescript_unicode_conceal_enable = false
         end,
     },
     { 'vmchale/dhall-vim' },
@@ -84,7 +82,6 @@ require('lazy').setup {
     { 'hashivim/vim-terraform' },
     { 'vito-c/jq.vim' },
     { 'cespare/vim-toml' },
-    { 'kongo2002/fsharp-vim' },
     { 'lnl7/vim-nix' },
 }
 
@@ -177,14 +174,12 @@ end
 lsp_server_setup 'bashls'
 lsp_server_setup 'cssls'
 lsp_server_setup 'dhall_lsp_server'
-lsp_server_setup 'fsautocomplete'
 lsp_server_setup 'hls'
 lsp_server_setup 'html'
 lsp_server_setup 'jsonls'
 lsp_server_setup 'kotlin_language_server'
 lsp_server_setup 'lua_ls'
 lsp_server_setup 'nil_ls'
-lsp_server_setup 'purescriptls'
 lsp_server_setup 'pyright'
 lsp_server_setup 'terraformls'
 lsp_server_setup 'ts_ls'
